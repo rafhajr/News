@@ -1,14 +1,29 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Plataform, StyleSheet, Alert, Text, TextInput, TouchableOpacity }  from 'react-native';
-
+import getRealm from '../services/realm';
 //import api from '../services/api';
 
 export default function CreateNews({ navigation }){
   const [title, setTitle] = useState(null);
   const [news, setNews] = useState(null);
   const [author, setAuthor] = useState(null);
+  
+  async function saveNews(name){
+    console.log(name)
+    const realm = await getRealm();
+    const data = {
+      id: 1,
+      title: title,
+      text: news,
+      
+    }
+    realm.write(() => {
+      realm.create('News', data);
+    });
 
-  function handleCreateNews(page) {
+
+  }
+  async function handleCreateNews(page) {
     if(page === 1){
       if(title === null || news === null || author === null){
         Alert.alert(
@@ -21,7 +36,23 @@ export default function CreateNews({ navigation }){
         );
       } else if (title != null && news != null && author != null){
         console.log(`vou criar a noticia ${news} com o titulo ${title} e voce ${author} como autor`)
-        navigation.navigate('ViewNews', { title, author, news });
+        try {
+          await saveNews(author);
+
+          setAuthor('')
+        } catch (err) {
+          console.log('vvvvvv erro vvvvv');
+          console.log(err);
+          Alert.alert(
+            'Error',
+            'Deu erro',
+            [
+              { text: 'OK', onPress: () => console.log('OK Pressed') }
+            ],
+            { cancelable: false }
+          );
+        }
+        // navigation.navigate('ViewNews', { title, author, news });
       } else {
         Alert.alert(
           'Error',
