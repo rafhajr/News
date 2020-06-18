@@ -28,8 +28,7 @@ export default function CreateNews({ navigation }){
     const realm = await getRealm();
     console.log(author)
     const filtered = `name = ${author}`;
-    console.log(filtered)
-    const authorExist = realm.objects('News').filtered(filtered);
+    const authorExist = realm.objects('News').filtered('name = ' + author);
 
     if(authorExist != null){
       aruth(authorExist)
