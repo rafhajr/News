@@ -3,10 +3,10 @@ export default class NewsSchema {
     name: 'News',
     primaryKey:'id',
     properties: {
-       id: { type:  'int', indexed: true },
+      id: { type:  'int', indexed: true },
       title: 'string',
       text: 'string',
-      author: 'Author[]',
+      authorID: 'int',
     },
   };
 }

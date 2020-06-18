@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { KeyboardAvoidingView, Plataform, StyleSheet, Text, TextInput, TouchableOpacity }  from 'react-native';
-
+import getRealm from '../services/realm';
 //import api from '../services/api';
+import {
+  Container, Title, Form, Input, Submit, List,
+} from './Style';
+
+import NewsPage from '../components/'
 
 export default function ViewNews({ navigation }){
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(2);
+  const [newsPage, setNewsPage] = useState([]);
 
   const title = navigation.getParam('title');
   const author = navigation.getParam('author');
   const news = navigation.getParam('news');
+
+
+
   function handleViewNews(type) {
     if(type === 1){
       setPage(0);
@@ -17,15 +26,33 @@ export default function ViewNews({ navigation }){
     } else if(type === 3){
       navigation.navigate('CreateNews');
     } else if(type === 4){
-      navigation.navigate('Menu');
+      navigation.navigate('CreateNews');
     }
     //navigation.navigate('CreateNews');
   }
 
+
+
   useEffect(() => {
     if(title === undefined && author === undefined && news === undefined){
       console.log('Voce so veio atras de noticias');
-      setPage(0);
+      async function loadRepositories() {
+        const realm = await getRealm();
+    
+        //console.tron.log(realm.path);
+
+        const Page = realm.objects('News');
+        const Author = realm.objects('Author');
+        //setNewsPage(person)
+        //setRepositories(data);
+        console.log(Page);
+        setNewsPage(Page)
+      }
+      
+      
+      loadRepositories();
+      console.log(newsPage);
+      setPage(2);
     } else if((title != undefined || author != undefined) && news === undefined){
       console.log('Voce veio pesquisar algo')
       setPage(1);
@@ -64,15 +91,18 @@ export default function ViewNews({ navigation }){
           </>
         )}
         {page === 2 && (
-          <>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.news}>{news}</Text>
-            <Text style={styles.author}>{author}</Text>
-          </>
+          <List
+            keyboardShouldPersistTaps="handled"
+            data={newsPage}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <NewsPage data={item}/>
+            )}
+          />
         )}
         <TouchableOpacity onPress={() => handleViewNews(4)} style={styles.button}>
-                  <Text style={styles.buttonText}>Home</Text>
-                </TouchableOpacity>
+          <Text style={styles.buttonText}>Home</Text>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
     </>
   );

@@ -7,22 +7,74 @@ export default function CreateNews({ navigation }){
   const [title, setTitle] = useState(null);
   const [news, setNews] = useState(null);
   const [author, setAuthor] = useState(null);
-  
-  async function saveNews(name){
-    console.log(name)
+
+
+  async function Delete(){
     const realm = await getRealm();
-    const data = {
-      id: 1,
+    const id = realm.objects('News').max("id");
+    const delet = realm.objects('News');
+    
+    realm.write(() => {
+      realm.delete(delet.filtered('id = 1'));
+    });
+  }
+
+  function aturh(data){
+    console.log('EXISTEEEEEEEEEE')
+    console.log(data)
+  }
+
+  async function idNews(){
+    const realm = await getRealm();
+    console.log(author)
+    const filtered = `name = ${author}`;
+    console.log(filtered)
+    const authorExist = realm.objects('News').filtered(filtered);
+
+    if(authorExist != null){
+      aruth(authorExist)
+    }
+
+    var nID = 0;
+    var aID = 0;
+    const newsID = realm.objects('News').max("id");
+    const authorID = realm.objects('Author').max("id");
+
+    if(newsID === null){
+      nID = 1;
+    } else {
+      nID = newsID + 1;
+    }
+
+    if(authorID === null){
+      aID = 1;
+    } else {
+      aID = authorID + 1;
+    }
+
+    saveNews(nID, aID);
+  }
+  async function saveNews(nID, aID){
+    const realm = await getRealm();
+    const dataNews = {
+      id: nID,
       title: title,
       text: news,
-      
+      authorID: aID,
     }
     realm.write(() => {
-      realm.create('News', data);
+      realm.create('News', dataNews);
     });
-
-
+    const dataAuthor = {
+      id: aID,
+      name: author,
+    }
+    realm.write(() => {
+      realm.create('Author', dataAuthor);
+    });
   }
+
+
   async function handleCreateNews(page) {
     if(page === 1){
       if(title === null || news === null || author === null){
@@ -37,7 +89,7 @@ export default function CreateNews({ navigation }){
       } else if (title != null && news != null && author != null){
         console.log(`vou criar a noticia ${news} com o titulo ${title} e voce ${author} como autor`)
         try {
-          await saveNews(author);
+          await idNews();
 
           setAuthor('')
         } catch (err) {
