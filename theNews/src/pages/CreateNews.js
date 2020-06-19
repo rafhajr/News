@@ -7,7 +7,7 @@ export default function CreateNews({ navigation }){
   const [title, setTitle] = useState(null);
   const [news, setNews] = useState(null);
   const [author, setAuthor] = useState(null);
-
+  const [newAuthor, setNewAuthor] = useState(true);
 
   async function Delete(){
     const realm = await getRealm();
@@ -19,36 +19,31 @@ export default function CreateNews({ navigation }){
     });
   }
 
-  function aturh(data){
-    console.log('EXISTEEEEEEEEEE')
-    console.log(data)
-  }
-
   async function idNews(){
     const realm = await getRealm();
     console.log(author)
     const filtered = `name = ${author}`;
-    const authorExist = realm.objects('News').filtered('name = ' + author);
-
-    if(authorExist != null){
-      aruth(authorExist)
-    }
-
+    const authorExist = realm.objects('Author').filtered(`name = "${author}"`);
+    const newsID = realm.objects('News').max("id");
+    const authorID = realm.objects('Author').max("id")
     var nID = 0;
     var aID = 0;
-    const newsID = realm.objects('News').max("id");
-    const authorID = realm.objects('Author').max("id");
+    if(authorExist[0] === undefined){
+      if(authorID === null){
+        aID = 1;
+      } else {
+        aID = authorID + 1;
+      }
+    } else {
+      console.log(authorExist[0].id)
+      aID = authorExist[0].id; 
+      setNewAuthor(false);
+    }
 
     if(newsID === null){
       nID = 1;
     } else {
       nID = newsID + 1;
-    }
-
-    if(authorID === null){
-      aID = 1;
-    } else {
-      aID = authorID + 1;
     }
 
     saveNews(nID, aID);
@@ -64,13 +59,16 @@ export default function CreateNews({ navigation }){
     realm.write(() => {
       realm.create('News', dataNews);
     });
-    const dataAuthor = {
-      id: aID,
-      name: author,
+
+    if(newAuthor === false){
+     const dataAuthor = {
+       id: aID,
+       name: author,
+     }
+     realm.write(() => {
+       realm.create('Author', dataAuthor);
+     });
     }
-    realm.write(() => {
-      realm.create('Author', dataAuthor);
-    });
   }
 
 
