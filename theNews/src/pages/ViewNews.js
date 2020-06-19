@@ -26,7 +26,7 @@ export default function ViewNews({ navigation }){
     } else if(type === 3){
       navigation.navigate('CreateNews');
     } else if(type === 4){
-      navigation.navigate('CreateNews');
+      navigation.navigate('Menu');
     }
     //navigation.navigate('CreateNews');
   }
@@ -48,14 +48,25 @@ export default function ViewNews({ navigation }){
         console.log(Page);
         setNewsPage(Page)
       }
-      
-      
       loadRepositories();
       console.log(newsPage);
       setPage(2);
     } else if((title != undefined || author != undefined) && news === undefined){
-      console.log('Voce veio pesquisar algo')
-      setPage(1);
+      async function find(){
+        const realm = await getRealm();
+        var idAuthor = null;
+        if(author != undefined && title === undefined){
+          const authorExist = realm.objects('Author').filtered(`name = "${author}"`)
+          idAuthor = authorExist[0].id;
+          const Page = realm.objects('News').filtered(`authorID = ${idAuthor}`);
+          setNewsPage(Page)
+        } else if(author === undefined && title != undefined){
+          const Page = realm.objects('News').filtered(`title = "${title}"`);
+          setNewsPage(Page)
+        }
+      }
+      find()
+      setPage(2);
     } else if(title != undefined && author != undefined && news != undefined){
       console.log('Voce acabou de criar uma noticia')
       setPage(2);
@@ -91,14 +102,15 @@ export default function ViewNews({ navigation }){
           </>
         )}
         {page === 2 && (
-          <List
-            keyboardShouldPersistTaps="handled"
-            data={newsPage}
-            keyExtractor={item => String(item.id)}
-            renderItem={({ item }) => (
-              <NewsPage data={item}/>
-            )}
-          />
+            <List
+              onPress={() => handleViewNews(4)}
+              keyboardShouldPersistTaps="handled"
+              data={newsPage}
+              keyExtractor={item => String(item.id)}
+              renderItem={({ item }) => (
+                <NewsPage data={item} navigation={navigation}/>
+              )}
+            />
         )}
         <TouchableOpacity onPress={() => handleViewNews(4)} style={styles.button}>
           <Text style={styles.buttonText}>Home</Text>

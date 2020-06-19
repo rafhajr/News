@@ -7,6 +7,8 @@ export default function SearchNews({ navigation }){
   const [title, setTitle] = useState(null);
   const [author, setAuthor] = useState(null);
 
+  
+
   function handleSearch(page) {
     if(page === 1){
       if(title === null && author === null){
