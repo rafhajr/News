@@ -34,7 +34,7 @@ export default function ViewNews({ navigation }){
         const realm = await getRealm();
 
         const Page = realm.objects('News').sorted('updated_date', true);
-        if(page === undefined){
+        if(Page[0] === undefined){
           setPage(1)
         }else{
           setNewsPage(Page)
@@ -48,28 +48,30 @@ export default function ViewNews({ navigation }){
         var idAuthor = null;
         if(author != undefined && title === undefined){
           const authorExist = realm.objects('Author').filtered(`name = "${author}"`)
-          idAuthor = authorExist[0].id;
-          const Page = realm.objects('News').filtered(`authorID = ${idAuthor}`);
-          
-          if(Page === {}){
+          if(authorExist[0] === undefined){
             setPage(1)
+          } else {
+            const Page = realm.objects('News').filtered(`authorID = ${authorExist[0].id}`)
+            setNewsPage(Page)
           }
-
-          setNewsPage(Page)
         } else if(author === undefined && title != undefined){
           const Page = realm.objects('News').filtered(`title = "${title}"`);
-          if(Page ===  {}){
+          if(Page[0] ===  undefined){
             setPage(1)
+          } else {
+            setNewsPage(Page)
           }
-          setNewsPage(Page)
-        } else {
+          
+        } else if (author != undefined && title != undefined){
           const authorExist = realm.objects('Author').filtered(`name = "${author}"`)
           idAuthor = authorExist[0].id;
           const Page = realm.objects('News').filtered(`authorID = ${idAuthor} AND title = "${title}"`);
-          if(Page ===  {}){
+          if(Page[0] ===  undefined){
             setPage(1)
+          } else {
+            setNewsPage(Page)
           }
-          setNewsPage(Page)
+          
         }
       }
       find()
