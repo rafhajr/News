@@ -6,21 +6,23 @@ import getRealm from '../../services/realm';
 export default function EditNews({ navigation }){
   const titleN = navigation.getParam('title');
   const authorN = navigation.getParam('author');
-  const newsN = navigation.getParam('text');
-  const idN = navigation.getParam('newsID');
+  const newsN = navigation.getParam('news');
+  const idN = navigation.getParam('id');
 
   const [title, setTitle] = useState(titleN);
   const [news, setNews] = useState(newsN);
   const [author, setAuthor] = useState(authorN);
 
+  const [newAuthor, setNewAuthor] = useState(true)
+
   async function Delete(){
     const realm = await getRealm();
-    const id = realm.objects('News').max("id");
     const delet = realm.objects('News');
-
     realm.write(() => {
       realm.delete(delet.filtered(`id = ${idN}`));
     });
+
+    navigation.navigate('Menu');
   }
 
   async function idNews(){
@@ -55,20 +57,24 @@ export default function EditNews({ navigation }){
 
   async function saveNews(nID, aID){
     const realm = await getRealm();
+    console.log(idN)
+    var date = new Date();
     const dataNews = {
-      id: nID,
+      id: idN,
       title: title,
       text: news,
-      authorID: aID,
+      authorID: 0,
+      updated_date: date,
     }
     realm.write(() => {
-      realm.create('News', dataNews);
+      realm.create('News', dataNews, 'modified');
     });
 
     if(newAuthor === false){
      const dataAuthor = {
-       id: aID,
+       id: 0,
        name: author,
+       update: date,
      }
      realm.write(() => {
        realm.create('Author', dataAuthor, 'modified');
@@ -126,7 +132,7 @@ export default function EditNews({ navigation }){
       behavior="padding"
       enabled={Platform.OS === 'ios'}
     >
-      <Text style={styles.title}>Criar notícias</Text>
+      <Text style={styles.title}>Editar notícias</Text>
       <TextInput 
         autoCorrect={false} 
         placeholder="Título da notícia" 
@@ -152,10 +158,10 @@ export default function EditNews({ navigation }){
         onChangeText={setAuthor}  
       />
       <TouchableOpacity onPress={() => handleCreateNews(1)} style={styles.button}>
-        <Text style={styles.buttonText}>Criar notícia</Text>
+        <Text style={styles.buttonText}>Alterar notícia</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleCreateNews(2)} style={styles.button}>
-        <Text style={styles.buttonText}>Home</Text>
+      <TouchableOpacity onPress={() => Delete()} style={styles.button}>
+        <Text style={styles.buttonText}>Deletar</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );

@@ -9,27 +9,20 @@ export default function CreateNews({ navigation }){
   const [author, setAuthor] = useState(null);
   const [newAuthor, setNewAuthor] = useState(true);
 
-  async function Delete(){
+  async function saveNews(){
+    console.log('cheguei no save')
     const realm = await getRealm();
-    const id = realm.objects('News').max("id");
-    const delet = realm.objects('News');
-    
-    realm.write(() => {
-      realm.delete(delet.filtered('id = 1'));
-    });
-  }
-
-  async function idNews(){
-    const realm = await getRealm();
-    console.log(author)
-    const filtered = `name = ${author}`;
     const authorExist = realm.objects('Author').filtered(`name = "${author}"`);
     const newsID = realm.objects('News').max("id");
     const authorID = realm.objects('Author').max("id")
-    var nID = 0;
-    var aID = 0;
+    var nID = 1;
+    var aID = 1;
+    console.log(newsID)
+    console.log(authorExist[0])
     if(authorExist[0] === undefined){
-      if(authorID === null){
+      console.log('olha ele aqui')
+      console.log(authorExist[0].id)
+      if(authorID === undefined){
         aID = 1;
       } else {
         aID = authorID + 1;
@@ -39,31 +32,31 @@ export default function CreateNews({ navigation }){
       aID = authorExist[0].id; 
       setNewAuthor(false)
     }
-
-    if(newsID === null){
+    if(newsID === undefined){
       nID = 1;
     } else {
       nID = newsID + 1;
     }
 
-    saveNews(nID, aID);
-  }
-  async function saveNews(nID, aID){
-    const realm = await getRealm();
+    var date = new Date();
     const dataNews = {
       id: nID,
       title: title,
       text: news,
       authorID: aID,
+      created_date: date,
+      updated_date: date,
     }
     realm.write(() => {
       realm.create('News', dataNews);
     });
 
-    if(newAuthor === false){
+    if(newAuthor === true){
      const dataAuthor = {
        id: aID,
        name: author,
+       created_date: date,
+       updated_date: date,
      }
      realm.write(() => {
        realm.create('Author', dataAuthor);
@@ -86,7 +79,7 @@ export default function CreateNews({ navigation }){
       } else if (title != null && news != null && author != null){
         console.log(`vou criar a noticia ${news} com o titulo ${title} e voce ${author} como autor`)
         try {
-          await idNews();
+          await saveNews();
 
           setAuthor('')
         } catch (err) {

@@ -7,6 +7,8 @@ export default class NewsSchema {
       title: 'string',
       text: 'string',
       authorID: 'int',
+      created_date: 'date',
+      updated_date: 'date',
     },
   };
 }

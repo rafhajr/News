@@ -5,6 +5,8 @@ export default class NewsSchema {
     properties: {
       id: { type: 'int', indexed: true },
       name: 'string',
+      created_date: 'date',
+      updated_date: 'date',
     },
   };
 }

@@ -41,7 +41,8 @@ export default function ViewNews({ navigation }){
     
         //console.tron.log(realm.path);
 
-        const Page = realm.objects('News');
+        const Page = realm.objects('News').sorted('updated_date', true);
+        
         const Author = realm.objects('Author');
         //setNewsPage(person)
         //setRepositories(data);
