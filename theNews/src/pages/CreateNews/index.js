@@ -21,7 +21,6 @@ export default function CreateNews({ navigation }){
     console.log(authorExist[0])
     if(authorExist[0] === undefined){
       console.log('olha ele aqui')
-      console.log(authorExist[0].id)
       if(authorID === undefined){
         aID = 1;
       } else {
@@ -51,7 +50,7 @@ export default function CreateNews({ navigation }){
       realm.create('News', dataNews);
     });
 
-    if(newAuthor === true){
+    if(authorExist[0] === undefined){
      const dataAuthor = {
        id: aID,
        name: author,
