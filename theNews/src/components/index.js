@@ -28,7 +28,7 @@ export default function NewsList({ data, navigation }) {
         <Stat>
           <StatCount>{author}</StatCount>
         </Stat>
-        <TouchableOpacity onPress={() => navigation.navigate('CreateNews', data)}>
+        <TouchableOpacity onPress={() => navigation.navigate('ReadNews',{ title: data.title, text: data.text, author: author, newsID: data.id})}>
           <Text>Ver mais...</Text>
         </TouchableOpacity>
       </Stats>

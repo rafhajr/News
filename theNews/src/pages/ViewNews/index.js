@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { KeyboardAvoidingView, Plataform, StyleSheet, Text, TextInput, TouchableOpacity }  from 'react-native';
-import getRealm from '../services/realm';
+import getRealm from '../../services/realm';
 //import api from '../services/api';
 import {
   Container, Title, Form, Input, Submit, List,
-} from './Style';
+} from './styles';
 
-import NewsPage from '../components/'
+import NewsPage from '../../components/'
 
 export default function ViewNews({ navigation }){
   const [page, setPage] = useState(2);

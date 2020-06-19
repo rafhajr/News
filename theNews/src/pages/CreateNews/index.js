@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Plataform, StyleSheet, Alert, Text, TextInput, TouchableOpacity }  from 'react-native';
-import getRealm from '../services/realm';
+import getRealm from '../../services/realm';
 //import api from '../services/api';
 
 export default function CreateNews({ navigation }){
@@ -37,7 +37,7 @@ export default function CreateNews({ navigation }){
     } else {
       console.log(authorExist[0].id)
       aID = authorExist[0].id; 
-      setNewAuthor(false);
+      setNewAuthor(false)
     }
 
     if(newsID === null){
