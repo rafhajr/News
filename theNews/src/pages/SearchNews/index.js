@@ -22,12 +22,9 @@ export default function SearchNews({ navigation }){
         );
       } else if( title != null && author != null){
         navigation.navigate('ViewNews', { title, author });
-        console.log(`vou te trazer todas as noticias com o titulo ${title} que tem esse autor aqui ${author}`)
       } else if ( title != null){
-        console.log(`vou te trazer todas as noticias com o titulo ${title}`)
         navigation.navigate('ViewNews', { title });
       } else if ( author != null){
-        console.log(`vou te trazer todas as noticias com o Autor ${author}`)
         navigation.navigate('ViewNews', { author });
       } else {
         Alert.alert(

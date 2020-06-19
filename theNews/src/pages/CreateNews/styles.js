@@ -1,46 +1,43 @@
-import { KeyboardAvoidingView, Plataform, StyleSheet, Text, TextInput, TouchableOpacity }  from 'react-native';
+import styled from 'styled-components/native';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#120046',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding:30
-  },
+export const Container = styled.View`
+  flex: 1;
+  background-color: #120046;
+  justify-content: center;
+  align-items: center;
+  padding:30px;
+`;
 
-  title: {
-    color: '#00db7d',
-    fontWeight: 'bold',
-    fontSize: 50,
-    padding: 20,
-  },
+export const Title = styled.Text`
+    color: #00db7d;
+    font-weight: bold;
+    font-size: 50px;
+    padding: 20px;
+`;
 
-  input: {
-    height: 46,
-    alignSelf: 'stretch',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 4,
-    marginTop: 20,
-    paddingHorizontal: 15,
-  },
+export const Input = styled.Text`
+  height: 46px; 
+  align-self: stretch;
+  background-color: #fff;
+  border-width: 1px;
+  border-color: #1312;
+  border-radius: 4px;
+  margin-top: 20px;
+  padding-horizontal: 15px;
+`;
 
-  button: {
-    height: 46,
-    alignItems: 'center',
-    alignSelf:'stretch',
-    backgroundColor: '#f5f5',
-    borderRadius: 4,
-    marginTop: 10,
-    justifyContent: 'center',
-  },
+export const Button = styled.TouchableOpacity`
+    height: 46px;
+    align-items: center;
+    align-self:stretch;
+    background-color: #f5f5;
+    border-radius: 4px;
+    margin-top: 10px;
+    justify-content: center;
+`;
 
-  buttonText: {
-    color: '#ddd',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-
-});
+export const ButtonText = styled.Text`
+  color: #ddd;
+  font-weight: bold;
+  font-size: 16px;
+`;

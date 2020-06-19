@@ -16,18 +16,25 @@ export default function EditNews({ navigation }){
   const [newAuthor, setNewAuthor] = useState(true)
 
   async function Delete(){
+   
     const realm = await getRealm();
     const delet = realm.objects('News');
     realm.write(() => {
       realm.delete(delet.filtered(`id = ${idN}`));
     });
-
-    navigation.navigate('Menu');
+    Alert.alert(
+      'Sucesso',
+      'Deletado com sucesso',
+      [
+        { text: 'OK', onPress: () => navigation.navigate('ViewNews') }
+      ],
+      { cancelable: false }
+    );
+    
   }
 
   async function idNews(){
     const realm = await getRealm();
-    console.log(author)
     const filtered = `name = ${author}`;
     const authorExist = realm.objects('Author').filtered(`name = "${author}"`);
     const newsID = realm.objects('News').max("id");
@@ -41,7 +48,6 @@ export default function EditNews({ navigation }){
         aID = authorID + 1;
       }
     } else {
-      console.log(authorExist[0].id)
       aID = authorExist[0].id; 
       setNewAuthor(false)
     }
@@ -94,13 +100,18 @@ export default function EditNews({ navigation }){
           { cancelable: false }
         );
       } else if (title != null && news != null && author != null){
-        console.log(`vou criar a noticia ${news} com o titulo ${title} e voce ${author} como autor`)
         try {
           await idNews();
 
-          setAuthor('')
+          Alert.alert(
+            'Sucesso',
+            'Notícia editada com sucesso',
+            [
+              { text: 'OK', onPress: () => navigation.navigate('ViewNews') }
+            ],
+            { cancelable: false }
+          );
         } catch (err) {
-          console.log('vvvvvv erro vvvvv');
           console.log(err);
           Alert.alert(
             'Error',

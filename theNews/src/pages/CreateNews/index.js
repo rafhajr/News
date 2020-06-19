@@ -10,24 +10,19 @@ export default function CreateNews({ navigation }){
   const [newAuthor, setNewAuthor] = useState(true);
 
   async function saveNews(){
-    console.log('cheguei no save')
     const realm = await getRealm();
     const authorExist = realm.objects('Author').filtered(`name = "${author}"`);
     const newsID = realm.objects('News').max("id");
     const authorID = realm.objects('Author').max("id")
     var nID = 1;
     var aID = 1;
-    console.log(newsID)
-    console.log(authorExist[0])
     if(authorExist[0] === undefined){
-      console.log('olha ele aqui')
       if(authorID === undefined){
         aID = 1;
       } else {
         aID = authorID + 1;
       }
     } else {
-      console.log(authorExist[0].id)
       aID = authorExist[0].id; 
       setNewAuthor(false)
     }
@@ -76,13 +71,18 @@ export default function CreateNews({ navigation }){
           { cancelable: false }
         );
       } else if (title != null && news != null && author != null){
-        console.log(`vou criar a noticia ${news} com o titulo ${title} e voce ${author} como autor`)
         try {
           await saveNews();
 
-          setAuthor('')
+          Alert.alert(
+            'Sucesso',
+            'Notícia criada com sucesso',
+            [
+              { text: 'OK', onPress: () => navigation.navigate('ViewNews') }
+            ],
+            { cancelable: false }
+          );
         } catch (err) {
-          console.log('vvvvvv erro vvvvv');
           console.log(err);
           Alert.alert(
             'Error',

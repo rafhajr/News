@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { KeyboardAvoidingView, Plataform, StyleSheet, Text, TextInput, TouchableOpacity }  from 'react-native';
 import getRealm from '../../services/realm';
+import styled from 'styled-components/native';
+import LinearGradient from 'react-native-linear-gradient';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 //import api from '../services/api';
-import {
-  Container, Title, Form, Input, Submit, List,
-} from './styles';
 
 import NewsPage from '../../components/'
 
 export default function ViewNews({ navigation }){
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(1);
   const [newsPage, setNewsPage] = useState([]);
 
   const title = navigation.getParam('title');
   const author = navigation.getParam('author');
   const news = navigation.getParam('news');
-
-
 
   function handleViewNews(type) {
     if(type === 1){
@@ -30,11 +28,8 @@ export default function ViewNews({ navigation }){
     }
   }
 
-
-
   useEffect(() => {
     if(title === undefined && author === undefined && news === undefined){
-      console.log('Voce so veio atras de noticias');
       async function loadRepositories() {
         const realm = await getRealm();
 
@@ -42,12 +37,10 @@ export default function ViewNews({ navigation }){
         if(page === undefined){
           setPage(1)
         }else{
-          console.log(Page);
           setNewsPage(Page)
         }
       }
       loadRepositories();
-      console.log(newsPage);
       setPage(2);
     } else if((title != undefined || author != undefined) && news === undefined){
       async function find(){
@@ -57,28 +50,33 @@ export default function ViewNews({ navigation }){
           const authorExist = realm.objects('Author').filtered(`name = "${author}"`)
           idAuthor = authorExist[0].id;
           const Page = realm.objects('News').filtered(`authorID = ${idAuthor}`);
-          if(Page === undefined){
-            setPage(0)
+          
+          if(Page === {}){
+            setPage(1)
           }
+
           setNewsPage(Page)
         } else if(author === undefined && title != undefined){
           const Page = realm.objects('News').filtered(`title = "${title}"`);
-          if(Page ===  undefined){
-            setPage(0)
+          if(Page ===  {}){
+            setPage(1)
+          }
+          setNewsPage(Page)
+        } else {
+          const authorExist = realm.objects('Author').filtered(`name = "${author}"`)
+          idAuthor = authorExist[0].id;
+          const Page = realm.objects('News').filtered(`authorID = ${idAuthor} AND title = "${title}"`);
+          if(Page ===  {}){
+            setPage(1)
           }
           setNewsPage(Page)
         }
       }
       find()
       setPage(2);
-    } else if(title != undefined && author != undefined && news != undefined){
-      console.log('Voce acabou de criar uma noticia')
-      setPage(2);
-    } else {
-      console.log('Algo de errado nao esta certo')
-      setPage(0);
     }
   }, []);
+
   return (
     <>
       <KeyboardAvoidingView 
@@ -86,7 +84,6 @@ export default function ViewNews({ navigation }){
         behavior="padding"
         enabled={Platform.OS === 'ios'}
       >
-        <Container style={styles.container}>
         {page === 0 &&(
           <>
             <Text style={styles.title}>Poxa, não existe nenhuma notícia ainda :(</Text>
@@ -118,13 +115,19 @@ export default function ViewNews({ navigation }){
             />
         )}
         <TouchableOpacity onPress={() => handleViewNews(4)} style={styles.button}>
-          <Text style={styles.buttonText}>Cancelar</Text>
+          <Text style={styles.buttonText}>Voltar</Text>
         </TouchableOpacity>
-        </Container>
       </KeyboardAvoidingView>
     </>
   );
 }
+
+const List = styled.FlatList.attrs({
+  contentContainerStyle: { paddingHorizontal: 20 },
+  showsVerticalScrollIndicator: false,
+})`
+margin-top: 20px;
+`;
 
 const styles = StyleSheet.create({
   container: {
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#120046',
     justifyContent: 'center',
     alignItems: 'center',
-    padding:10
+    padding:10,
   },
 
   title: {

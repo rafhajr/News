@@ -4,7 +4,7 @@ import getRealm from '../../services/realm';
 //import api from '../services/api';
 import {
   Container, Name, Description, Stats, Stat, StatCount, Refresh, RefreshText,
-} from './styles';
+} from './styles';import styled from 'styled-components/native';
 
 
 export default function ViewNews({ navigation }){
@@ -16,21 +16,23 @@ export default function ViewNews({ navigation }){
 
   return(
   <>
-    <Container style={styles.container}>
-      <Name>{title}</Name>
-      <Description>{news}</Description>
-      <Stats>
-        <Stat>
-          <StatCount>{author}</StatCount>
-        </Stat>
-      </Stats>
-      <TouchableOpacity style={styles.button}onPress={() => navigation.navigate('EditNews',{ title, news, author, id})}>
-          <Text>Editar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity  style={styles.button} onPress={() => navigation.navigate('ViewNews')}>
-          <Text>Voltar</Text>
-        </TouchableOpacity>
-    </Container>{console.log(title)}
+  <KeyboardAvoidingView 
+      style={styles.container}
+      behavior="padding"
+      enabled={Platform.OS === 'ios'}
+    >
+    <Container>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.text}>{news}</Text>
+      <Text style ={styles.author}>{author}</Text>
+    </Container>
+    <TouchableOpacity onPress={() => navigation.navigate('EditNews',{ title, news, author, id})} style={styles.button}>
+        <Text style={styles.buttonText}>Editar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('ViewNews')} style={styles.button}>
+        <Text style={styles.buttonText}>Voltar</Text>
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
   </>
   )
 }
@@ -43,11 +45,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding:30
   },
-
   title: {
     color: '#00db7d',
     fontWeight: 'bold',
-    fontSize: 50,
+    fontSize: 30,
+    padding: 20,
+  },
+  text: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    padding: 20,
+  },
+  author: {
+    color: '#00db7d',
+    fontWeight: 'bold',
+    fontSize: 20,
     padding: 20,
   },
 
@@ -78,4 +90,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-});
+})
