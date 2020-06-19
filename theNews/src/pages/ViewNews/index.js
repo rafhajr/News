@@ -28,7 +28,6 @@ export default function ViewNews({ navigation }){
     } else if(type === 4){
       navigation.navigate('Menu');
     }
-    //navigation.navigate('CreateNews');
   }
 
 
@@ -38,16 +37,14 @@ export default function ViewNews({ navigation }){
       console.log('Voce so veio atras de noticias');
       async function loadRepositories() {
         const realm = await getRealm();
-    
-        //console.tron.log(realm.path);
 
         const Page = realm.objects('News').sorted('updated_date', true);
-        
-        const Author = realm.objects('Author');
-        //setNewsPage(person)
-        //setRepositories(data);
-        console.log(Page);
-        setNewsPage(Page)
+        if(page === undefined){
+          setPage(1)
+        }else{
+          console.log(Page);
+          setNewsPage(Page)
+        }
       }
       loadRepositories();
       console.log(newsPage);
@@ -60,9 +57,15 @@ export default function ViewNews({ navigation }){
           const authorExist = realm.objects('Author').filtered(`name = "${author}"`)
           idAuthor = authorExist[0].id;
           const Page = realm.objects('News').filtered(`authorID = ${idAuthor}`);
+          if(Page === undefined){
+            setPage(0)
+          }
           setNewsPage(Page)
         } else if(author === undefined && title != undefined){
           const Page = realm.objects('News').filtered(`title = "${title}"`);
+          if(Page ===  undefined){
+            setPage(0)
+          }
           setNewsPage(Page)
         }
       }
@@ -83,6 +86,7 @@ export default function ViewNews({ navigation }){
         behavior="padding"
         enabled={Platform.OS === 'ios'}
       >
+        <Container style={styles.container}>
         {page === 0 &&(
           <>
             <Text style={styles.title}>Poxa, não existe nenhuma notícia ainda :(</Text>
@@ -114,8 +118,9 @@ export default function ViewNews({ navigation }){
             />
         )}
         <TouchableOpacity onPress={() => handleViewNews(4)} style={styles.button}>
-          <Text style={styles.buttonText}>Home</Text>
+          <Text style={styles.buttonText}>Cancelar</Text>
         </TouchableOpacity>
+        </Container>
       </KeyboardAvoidingView>
     </>
   );
@@ -127,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#120046',
     justifyContent: 'center',
     alignItems: 'center',
-    padding:30
+    padding:10
   },
 
   title: {

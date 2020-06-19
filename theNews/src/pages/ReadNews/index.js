@@ -16,28 +16,66 @@ export default function ViewNews({ navigation }){
 
   return(
   <>
-    <Container>
+    <Container style={styles.container}>
       <Name>{title}</Name>
-      <Description>{news}
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nec gravida massa, eu molestie ex. Donec porta posuere purus sit amet feugiat. Fusce ac mi at lacus consectetur feugiat scelerisque at ipsum. Vestibulum finibus ligula vel velit dignissim gravida. Fusce consequat facilisis nibh et aliquet. Pellentesque iaculis vel risus ac tempor. Etiam ac leo nisl. Phasellus tincidunt convallis magna, eu tristique massa. Morbi et condimentum turpis. Vivamus sollicitudin dolor commodo vulputate luctus. Vestibulum tempus sollicitudin nibh, et varius magna tempor vitae.
-
-Mauris suscipit placerat dolor, vel dignissim eros blandit id. Quisque ut lectus porttitor, auctor mi at, ornare lorem. Aenean malesuada facilisis libero, non pretium ante porta sed. Donec laoreet massa ligula, nec efficitur risus aliquam non. Integer scelerisque convallis sodales. Quisque ullamcorper in nulla quis varius. Suspendisse facilisis vehicula lectus sit amet auctor. Aenean et ligula porttitor, fermentum nunc eget, suscipit diam. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-
-Sed in lacus ac mi malesuada efficitur in at dolor. Nam porttitor augue sit amet egestas rhoncus. 
-Donec ac velit eleifend, euismod nisl et, ornare est. 
-      </Description>
+      <Description>{news}</Description>
       <Stats>
         <Stat>
           <StatCount>{author}</StatCount>
         </Stat>
       </Stats>
-      <TouchableOpacity onPress={() => navigation.navigate('EditNews',{ title, news, author, id})}>
+      <TouchableOpacity style={styles.button}onPress={() => navigation.navigate('EditNews',{ title, news, author, id})}>
           <Text>Editar</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('ViewNews')}>
+        <TouchableOpacity  style={styles.button} onPress={() => navigation.navigate('ViewNews')}>
           <Text>Voltar</Text>
         </TouchableOpacity>
     </Container>{console.log(title)}
   </>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#120046',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding:30
+  },
+
+  title: {
+    color: '#00db7d',
+    fontWeight: 'bold',
+    fontSize: 50,
+    padding: 20,
+  },
+
+  input: {
+    height: 46,
+    alignSelf: 'stretch',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 4,
+    marginTop: 20,
+    paddingHorizontal: 15,
+  },
+
+  button: {
+    height: 46,
+    alignItems: 'center',
+    alignSelf:'stretch',
+    backgroundColor: '#f5f5',
+    borderRadius: 4,
+    marginTop: 10,
+    justifyContent: 'center',
+  },
+
+  buttonText: {
+    color: '#ddd',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+
+});

@@ -143,7 +143,7 @@ export default function CreateNews({ navigation }){
         <Text style={styles.buttonText}>Criar notícia</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => handleCreateNews(2)} style={styles.button}>
-        <Text style={styles.buttonText}>Home</Text>
+        <Text style={styles.buttonText}>Cancelar</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );

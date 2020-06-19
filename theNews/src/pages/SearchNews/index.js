@@ -71,7 +71,7 @@ export default function SearchNews({ navigation }){
         <Text style={styles.buttonText}>Pesquisar notícias</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => handleSearch(2)} style={styles.button}>
-        <Text style={styles.buttonText}>Menu</Text>
+        <Text style={styles.buttonText}>Cancelar</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );

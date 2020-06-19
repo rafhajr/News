@@ -63,7 +63,7 @@ export default function EditNews({ navigation }){
       id: idN,
       title: title,
       text: news,
-      authorID: 0,
+      authorID: aID,
       updated_date: date,
     }
     realm.write(() => {
@@ -162,6 +162,9 @@ export default function EditNews({ navigation }){
       </TouchableOpacity>
       <TouchableOpacity onPress={() => Delete()} style={styles.button}>
         <Text style={styles.buttonText}>Deletar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('ViewNews')} style={styles.button}>
+        <Text style={styles.buttonText}>Cancelar</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
